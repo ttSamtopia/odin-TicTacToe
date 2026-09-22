@@ -21,6 +21,15 @@ const Gameboard = (function () {
         getGameboard () {
             return _gameboard.map((row) => row.slice());
         },
+
+        placeMarker (marker, row, column) {
+            if (marker !== "X" && marker !== "O") throw Error(`Not valid marker value ("X" or "O")`);
+            let currentCellContent = this.getCell(row, column);
+            if (currentCellContent !== "") throw Error("Cell already taken");
+            row--;
+            column--;
+            _gameboard[row][column] = marker;
+        },
 console.log(Gameboard.getCell(1,3));
 console.log(Gameboard.getGameboard());
 Gameboard.reset()
