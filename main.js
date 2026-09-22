@@ -30,6 +30,19 @@ const Gameboard = (function () {
             column--;
             _gameboard[row][column] = marker;
         },
+
+        reset () {
+            _gameboard.forEach((row) => {
+                row.forEach((_, index) => {
+                    row[index] = "";
+                });
+            });
+        },
+
+    };
+
+})()
+
 console.log(Gameboard.getCell(1,3));
 console.log(Gameboard.getGameboard());
 Gameboard.reset()
