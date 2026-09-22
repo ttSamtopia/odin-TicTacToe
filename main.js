@@ -17,6 +17,10 @@ const Gameboard = (function () {
             column--;
             return _gameboard[row][column];
         },
+
+        getGameboard () {
+            return _gameboard.map((row) => row.slice());
+        },
 console.log(Gameboard.getCell(1,3));
 console.log(Gameboard.getGameboard());
 Gameboard.reset()
