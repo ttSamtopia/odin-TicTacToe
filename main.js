@@ -1,3 +1,4 @@
+// Gameboard Constructor
 const Gameboard = (function () {
 
     const _gameboard = [
@@ -43,8 +44,29 @@ const Gameboard = (function () {
 
 })()
 
+// Tests for Gameboard
 console.log(Gameboard.getCell(1,3));
 console.log(Gameboard.getGameboard());
 Gameboard.reset()
 Gameboard.placeMarker("X", 2, 2)
 console.log(Gameboard.getGameboard());
+
+
+// Player Constructor
+function createPlayer (name, marker, userControlled = true) {
+    
+    if (marker !== "X" && marker !== "O") throw Error("Not Valid player marker");
+
+    return {
+        name,
+        marker,
+        userControlled,
+    };
+
+}
+
+// Player tests
+const userPlayer = createPlayer("Human", "X", true);
+console.log(userPlayer);
+const cpuPlayer = createPlayer("CPU", "O", false);
+console.log(cpuPlayer);
