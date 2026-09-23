@@ -170,3 +170,20 @@ const gameFlow = (function () {
             return true;
         },
 
+        playRound (row, column) {
+            try {
+                if (_gameOver) throw Error("Game is already over")
+                Gameboard.placeMarker(_currentPlayer.marker, row, column);
+                if (this.checkWin(row, column)) {
+                    _gameOver = true;
+                    _currentPlayer.addScore();
+                }
+                else if (this.checkTie()) _gameOver = true;
+                if (!_gameOver) _switchCurrentPlayer();
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
+    };
+})();
+
