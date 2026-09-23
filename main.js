@@ -135,3 +135,13 @@ const gameFlow = (function () {
             return false;
         }
     }
+
+    return {
+        getCurrentPlayer () {
+            return _currentPlayer;
+        },
+
+        getGameOver () {
+            return _gameOver;
+        },
+
