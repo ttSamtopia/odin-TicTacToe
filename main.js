@@ -187,3 +187,13 @@ const gameFlow = (function () {
     };
 })();
 
+// gameFlow Tests
+gameFlow.newGame()
+gameFlow.playRound(2,1)
+console.log(Gameboard.getGameboard());
+gameFlow.playRound(2,2)
+console.log(Gameboard.getGameboard());
+gameFlow.playRound(2,2)
+console.log(Gameboard.getGameboard());
+gameFlow.playRound(2,3)
+console.log(Gameboard.getGameboard());
