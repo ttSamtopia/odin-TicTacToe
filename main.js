@@ -75,3 +75,7 @@ let player2 = createPlayer("CPU", "O", false);
 console.log(player2);
 
 
+// gameFlow Constructor
+const gameFlow = (function () {
+    let _currentPlayer = null;
+    let _gameOver = false;
