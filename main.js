@@ -51,13 +51,12 @@ console.log(Gameboard.getGameboard());
 // Player Constructor
 function createPlayer (name, marker, userControlled = true) {
     if (marker !== "X" && marker !== "O") throw Error("Not Valid player marker");
+    let _score = 0;
 
     return {
         name,
         marker,
         userControlled,
-        score: 0,
-    };
 
 }
 
