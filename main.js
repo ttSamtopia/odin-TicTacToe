@@ -87,3 +87,7 @@ const gameFlow = (function () {
         else if (randomNumber === 2) _currentPlayer = player2;
     };
 
+    function _switchCurrentPlayer () {
+        _currentPlayer === player1 ? _currentPlayer = player2 : _currentPlayer = player1;
+    };
+
