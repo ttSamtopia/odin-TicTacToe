@@ -79,3 +79,11 @@ console.log(player2);
 const gameFlow = (function () {
     let _currentPlayer = null;
     let _gameOver = false;
+
+    function _shuffleStartingPlayer () {
+        if (_currentPlayer !== null) throw Error("Game has already started");
+        const randomNumber = Math.floor(Math.random() * 2) + 1
+        if (randomNumber === 1) _currentPlayer = player1;
+        else if (randomNumber === 2) _currentPlayer = player2;
+    };
+
