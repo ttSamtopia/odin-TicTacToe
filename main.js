@@ -61,6 +61,7 @@ function createPlayer (name, marker, userControlled = true) {
         name,
         marker,
         userControlled,
+        score: 0,
     };
 
 }
