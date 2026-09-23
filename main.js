@@ -1,6 +1,5 @@
 // Gameboard Constructor
 const Gameboard = (function () {
-
     const _gameboard = [
         ["X", "O", "X"],
         ["O", "X", "O"],
@@ -8,7 +7,6 @@ const Gameboard = (function () {
     ]
 
     return {
-
         getCell (row, column) {
             row = parseInt(row);
             column = parseInt(column);
@@ -39,9 +37,7 @@ const Gameboard = (function () {
                 });
             });
         },
-
     };
-
 })()
 
 // Tests for Gameboard
@@ -54,7 +50,6 @@ console.log(Gameboard.getGameboard());
 
 // Player Constructor
 function createPlayer (name, marker, userControlled = true) {
-    
     if (marker !== "X" && marker !== "O") throw Error("Not Valid player marker");
 
     return {
