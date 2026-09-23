@@ -69,7 +69,9 @@ function createPlayer (name, marker, userControlled = true) {
 }
 
 // Player tests
-const userPlayer = createPlayer("Human", "X", true);
-console.log(userPlayer);
-const cpuPlayer = createPlayer("CPU", "O", false);
-console.log(cpuPlayer);
+let player1 = createPlayer("Human", "X", true);
+console.log(player1);
+let player2 = createPlayer("CPU", "O", false);
+console.log(player2);
+
+
