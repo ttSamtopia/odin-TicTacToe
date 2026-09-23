@@ -160,3 +160,13 @@ const gameFlow = (function () {
             }
         },
 
+        checkTie () {
+            const gameboard = Gameboard.getGameboard();
+            for (let row of gameboard) {
+                for (let cell of row) {
+                    if (cell === "") return false;
+                }
+            }
+            return true;
+        },
+
