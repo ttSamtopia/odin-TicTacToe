@@ -145,3 +145,10 @@ const gameFlow = (function () {
             return _gameOver;
         },
 
+        newGame () {
+            Gameboard.reset();
+            _currentPlayer = null;
+            _shuffleStartingPlayer();
+            _gameOver = false;
+        },
+
