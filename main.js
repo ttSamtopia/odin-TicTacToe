@@ -58,6 +58,14 @@ function createPlayer (name, marker, userControlled = true) {
         marker,
         userControlled,
 
+        getScore () {
+            return _score;
+        },
+
+        addScore () {
+            _score++;
+        },
+    };
 }
 
 // Player tests
