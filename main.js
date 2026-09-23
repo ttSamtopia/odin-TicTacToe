@@ -152,3 +152,11 @@ const gameFlow = (function () {
             _gameOver = false;
         },
 
+        checkWin (row, column) {
+            if (_checkColumnWin(column) || _checkRowWin(row) || _checkDiagonalWin(row, column)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
