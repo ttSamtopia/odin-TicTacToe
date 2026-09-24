@@ -149,6 +149,8 @@ const gameFlow = (function () {
             _currentPlayer = null;
             _shuffleStartingPlayer();
             _gameOver = false;
+            console.log(`Starting Player: ${_currentPlayer.name}`);
+            console.log(Gameboard.getGameboard());
         },
 
         checkWin (row, column) {
@@ -188,6 +190,7 @@ const gameFlow = (function () {
                     return;
                 }
                 _switchCurrentPlayer();
+                console.log(Gameboard.getGameboard());
             } catch (error) {
                 console.log(error.message);
             }
