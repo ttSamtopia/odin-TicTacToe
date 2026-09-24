@@ -3,3 +3,23 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body {
+    height: 100vh;
+    padding-top: min(5vh, 5vw);
+}
+
+#gameboard {
+    height: min(90vh, 90vw);
+    width: min(90vh, 90vw);
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    background-color: black;
+    gap: 2px;
+}
+
+.cell {
+    background-color: white;
+}
