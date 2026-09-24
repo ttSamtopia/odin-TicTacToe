@@ -179,13 +179,22 @@ const gameFlow = (function () {
         playRound (row, column) {
             try {
                 if (_gameOver) { throw Error("Game is already over"); }
+                if (_currentPlayer === null) { throw Error("Start a new game first"); }
                 Gameboard.placeMarker(_currentPlayer.marker, row, column);
                 if (this.checkWin(row, column)) {
                     _gameOver = true;
                     _currentPlayer.addScore();
+                    console.log(`${_currentPlayer.name} won!`);
+                    console.log(`Score is ${player1.getScore()} - ${player2.getScore()}`);
+                    return;
                 }
-                else if (this.checkTie()) _gameOver = true;
-                if (!_gameOver) _switchCurrentPlayer();
+                else if (this.checkTie()) {
+                    _gameOver = true;
+                    console.log("It's a tie!");
+                    console.log(`Score is ${player1.getScore()} - ${player2.getScore()}`);
+                    return;
+                }
+                _switchCurrentPlayer();
             } catch (error) {
                 console.log(error.message);
             }
