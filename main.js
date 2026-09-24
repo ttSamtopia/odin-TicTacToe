@@ -1,5 +1,5 @@
-// Gameboard factory
-const Gameboard = (function () {
+// gameboard factory
+const gameboard = (function () {
     const _gameboard = [
         ["X", "O", "X"],
         ["O", "X", "O"],
@@ -90,14 +90,14 @@ const gameFlow = (function () {
     };
 
     function _checkColumnWin (column) {
-        if (_checkMatchingMarker(Gameboard.getCell(1, column), Gameboard.getCell(2, column), Gameboard.getCell(3, column))) {
+        if (_checkMatchingMarker(gameboard.getCell(1, column), gameboard.getCell(2, column), gameboard.getCell(3, column))) {
             return true;
         }
         return false;
     };
 
     function _checkRowWin (row) {
-        if (_checkMatchingMarker(Gameboard.getCell(row, 1), Gameboard.getCell(row, 2), Gameboard.getCell(row, 3))) {
+        if (_checkMatchingMarker(gameboard.getCell(row, 1), gameboard.getCell(row, 2), gameboard.getCell(row, 3))) {
             return true;
         } else {
             return false;
@@ -108,7 +108,7 @@ const gameFlow = (function () {
         const cordsString = `${row},${column}`;
         if (cordsString === "2,2") {
             if (
-                _checkMatchingMarker(Gameboard.getCell(1,1), Gameboard.getCell(2,2), Gameboard.getCell(3,3)) || _checkMatchingMarker(Gameboard.getCell(1,3), Gameboard.getCell(2,2), Gameboard.getCell(3,1))
+                _checkMatchingMarker(gameboard.getCell(1,1), gameboard.getCell(2,2), gameboard.getCell(3,3)) || _checkMatchingMarker(gameboard.getCell(1,3), gameboard.getCell(2,2), gameboard.getCell(3,1))
             ) {
                 return true;
             } else {
@@ -116,7 +116,7 @@ const gameFlow = (function () {
             }
         } else if (cordsString === "1,1" || cordsString === "3,3") {
             if (
-                _checkMatchingMarker(Gameboard.getCell(1,1), Gameboard.getCell(2,2), Gameboard.getCell(3,3))
+                _checkMatchingMarker(gameboard.getCell(1,1), gameboard.getCell(2,2), gameboard.getCell(3,3))
             ) {
                 return true;
             } else {
@@ -124,7 +124,7 @@ const gameFlow = (function () {
             }
         } else if (cordsString === "1,3" || cordsString === "3,1") {
             if (
-                _checkMatchingMarker(Gameboard.getCell(1,3), Gameboard.getCell(2,2), Gameboard.getCell(3,1))
+                _checkMatchingMarker(gameboard.getCell(1,3), gameboard.getCell(2,2), gameboard.getCell(3,1))
             ) {
                 return true;
             } else {
@@ -145,12 +145,12 @@ const gameFlow = (function () {
         },
 
         newGame () {
-            Gameboard.reset();
+            gameboard.reset();
             _currentPlayer = null;
             _shuffleStartingPlayer();
             _gameOver = false;
             console.log(`Starting Player: ${_currentPlayer.name}`);
-            console.log(Gameboard.getGameboard());
+            console.log(gameboard.getGameboard());
         },
 
         checkWin (row, column) {
@@ -162,8 +162,8 @@ const gameFlow = (function () {
         },
 
         checkTie () {
-            const gameboard = Gameboard.getGameboard();
-            for (let row of gameboard) {
+            const currentBoard = gameboard.getGameboard();
+            for (let row of currentBoard) {
                 for (let cell of row) {
                     if (cell === "") { return false; }
                 }
@@ -175,7 +175,7 @@ const gameFlow = (function () {
             try {
                 if (_gameOver) { throw Error("Game is already over"); }
                 if (_currentPlayer === null) { throw Error("Start a new game first"); }
-                Gameboard.placeMarker(_currentPlayer.marker, row, column);
+                gameboard.placeMarker(_currentPlayer.marker, row, column);
                 if (this.checkWin(row, column)) {
                     _gameOver = true;
                     _currentPlayer.addScore();
@@ -190,7 +190,7 @@ const gameFlow = (function () {
                     return;
                 }
                 _switchCurrentPlayer();
-                console.log(Gameboard.getGameboard());
+                console.log(gameboard.getGameboard());
             } catch (error) {
                 console.log(error.message);
             }
