@@ -88,7 +88,7 @@ const gameFlow = (function () {
     };
 
     function _switchCurrentPlayer () {
-        _currentPlayer === player1 ? _currentPlayer = player2 : _currentPlayer = player1;
+        _currentPlayer = _currentPlayer === player1 ? player2 : player1;
     };
 
     function _checkMatchingMarker (val1, val2, val3) {
