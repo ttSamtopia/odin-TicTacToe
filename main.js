@@ -197,3 +197,31 @@ const gameFlow = (function () {
         },
     };
 })();
+
+
+// display Factory
+const display = (function () {
+
+    return {
+
+        renderGameboard () {
+            let domCells = document.querySelectorAll(".cell");
+            for (let cell of domCells) {
+                let row = cell.dataset.row;
+                let column = cell.dataset.column;
+                let cellContent = gameboard.getCell(row, column);
+                if (cellContent === "") { continue; }
+                else if (cellContent === "X") {
+                    cell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M22 2 2 22"/><path d="m2 2 20 20"/></svg>`;
+                } else {
+                    cell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle preview-icon"><circle cx="12" cy="12" r="10"/></svg>`;
+                }
+            };
+        },
+
+    };
+
+})()
+
+// display Tests
+display.renderGameboard()
