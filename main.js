@@ -10,8 +10,8 @@ const Gameboard = (function () {
         getCell (row, column) {
             row = parseInt(row);
             column = parseInt(column);
-            if (!(row >= 1 && row <= 3)) throw Error("Incorrect Row Number (1-3)");
-            if (!(column >= 1 && column <= 3)) throw Error("Incorrect Column Number (1-3)");
+            if (!(row >= 1 && row <= 3)) { throw Error("Incorrect Row Number (1-3)"); }
+            if (!(column >= 1 && column <= 3)) { throw Error("Incorrect Column Number (1-3)"); }
             row--;
             column--;
             return _gameboard[row][column];
@@ -22,9 +22,9 @@ const Gameboard = (function () {
         },
 
         placeMarker (marker, row, column) {
-            if (marker !== "X" && marker !== "O") throw Error(`Not valid marker value ("X" or "O")`);
+            if (marker !== "X" && marker !== "O") { throw Error(`Not valid marker value ("X" or "O")`); }
             let currentCellContent = this.getCell(row, column);
-            if (currentCellContent !== "") throw Error("Cell already taken");
+            if (currentCellContent !== "") { throw Error("Cell already taken"); }
             row--;
             column--;
             _gameboard[row][column] = marker;
@@ -50,7 +50,7 @@ console.log(Gameboard.getGameboard());
 
 // Player factory
 function createPlayer (name, marker, userControlled = true) {
-    if (marker !== "X" && marker !== "O") throw Error("Not Valid player marker");
+    if (marker !== "X" && marker !== "O") { throw Error("Not Valid player marker"); }
     let _score = 0;
 
     return {
@@ -81,10 +81,10 @@ const gameFlow = (function () {
     let _gameOver = false;
 
     function _shuffleStartingPlayer () {
-        if (_currentPlayer !== null) throw Error("Game has already started");
+        if (_currentPlayer !== null) { throw Error("Game has already started"); }
         const randomNumber = Math.floor(Math.random() * 2) + 1
-        if (randomNumber === 1) _currentPlayer = player1;
-        else if (randomNumber === 2) _currentPlayer = player2;
+        if (randomNumber === 1) { _currentPlayer = player1; }
+        else if (randomNumber === 2) { _currentPlayer = player2; }
     };
 
     function _switchCurrentPlayer () {
@@ -92,8 +92,8 @@ const gameFlow = (function () {
     };
 
     function _checkMatchingMarker (val1, val2, val3) {
-        if (val1 === val2 && val2 === val3) return true;
-        else return false;
+        if (val1 === val2 && val2 === val3) { return true; }
+        else { return false; }
     };
 
     function _checkColumnWin (column) {
@@ -164,7 +164,7 @@ const gameFlow = (function () {
             const gameboard = Gameboard.getGameboard();
             for (let row of gameboard) {
                 for (let cell of row) {
-                    if (cell === "") return false;
+                    if (cell === "") { return false; }
                 }
             }
             return true;
@@ -172,7 +172,7 @@ const gameFlow = (function () {
 
         playRound (row, column) {
             try {
-                if (_gameOver) throw Error("Game is already over")
+                if (_gameOver) { throw Error("Game is already over"); }
                 Gameboard.placeMarker(_currentPlayer.marker, row, column);
                 if (this.checkWin(row, column)) {
                     _gameOver = true;
