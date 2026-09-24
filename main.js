@@ -1,4 +1,4 @@
-// Gameboard Constructor
+// Gameboard factory
 const Gameboard = (function () {
     const _gameboard = [
         ["X", "O", "X"],
@@ -48,7 +48,7 @@ Gameboard.placeMarker("X", 2, 2)
 console.log(Gameboard.getGameboard());
 
 
-// Player Constructor
+// Player factory
 function createPlayer (name, marker, userControlled = true) {
     if (marker !== "X" && marker !== "O") throw Error("Not Valid player marker");
     let _score = 0;
@@ -75,7 +75,7 @@ let player2 = createPlayer("CPU", "O", false);
 console.log(player2);
 
 
-// gameFlow Constructor
+// gameFlow factory
 const gameFlow = (function () {
     let _currentPlayer = null;
     let _gameOver = false;
