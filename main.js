@@ -118,18 +118,24 @@ const gameFlow = (function () {
                 _checkMatchingMarker(Gameboard.getCell(1,1), Gameboard.getCell(2,2), Gameboard.getCell(3,3)) || _checkMatchingMarker(Gameboard.getCell(1,3), Gameboard.getCell(2,2), Gameboard.getCell(3,1))
             ) {
                 return true;
+            } else {
+                return false;
             }
         } else if (cordsString === "1,1" || cordsString === "3,3") {
             if (
                 _checkMatchingMarker(Gameboard.getCell(1,1), Gameboard.getCell(2,2), Gameboard.getCell(3,3))
             ) {
                 return true;
+            } else {
+                return false;
             }
         } else if (cordsString === "1,3" || cordsString === "3,1") {
             if (
                 _checkMatchingMarker(Gameboard.getCell(1,3), Gameboard.getCell(2,2), Gameboard.getCell(3,1))
             ) {
                 return true;
+            } else {
+                return false;
             }
         } else {
             return false;
