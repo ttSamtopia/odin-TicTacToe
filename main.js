@@ -40,13 +40,6 @@ const Gameboard = (function () {
     };
 })()
 
-// Tests for Gameboard
-console.log(Gameboard.getCell(1,3));
-console.log(Gameboard.getGameboard());
-Gameboard.reset()
-Gameboard.placeMarker("X", 2, 2)
-console.log(Gameboard.getGameboard());
-
 
 // Player factory
 function createPlayer (name, marker, userControlled = true) {
@@ -201,14 +194,3 @@ const gameFlow = (function () {
         },
     };
 })();
-
-// gameFlow Tests
-gameFlow.newGame()
-gameFlow.playRound(2,1)
-console.log(Gameboard.getGameboard());
-gameFlow.playRound(2,2)
-console.log(Gameboard.getGameboard());
-gameFlow.playRound(2,2)
-console.log(Gameboard.getGameboard());
-gameFlow.playRound(2,3)
-console.log(Gameboard.getGameboard());
