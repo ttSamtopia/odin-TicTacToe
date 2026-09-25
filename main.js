@@ -203,7 +203,6 @@ const gameFlow = (function () {
 const display = (function () {
 
     return {
-
         renderGameboard () {
             let domCells = document.querySelectorAll(".cell");
             for (let cell of domCells) {
@@ -220,9 +219,7 @@ const display = (function () {
                 }
             };
         },
-
     };
-
 })()
 
 // display Tests
