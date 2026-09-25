@@ -224,3 +224,9 @@ const display = (function () {
 
 // display Tests
 display.renderGameboard()
+
+
+// Event Listeners
+const domGameboard = document.querySelector("#gameboard");
+
+domGameboard.addEventListener("click", display.addMarker)
