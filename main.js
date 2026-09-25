@@ -177,7 +177,7 @@ const gameFlow = (function () {
                 if (_gameOver) { throw Error("Game is already over"); }
                 if (_currentPlayer === null) { throw Error("Start a new game first"); }
                 gameboard.placeMarker(_currentPlayer.marker, row, column);
-                display.renderGameboard()
+                display.renderGameboard();
                 if (this.checkWin(row, column)) {
                     _gameOver = true;
                     _currentPlayer.addScore();
@@ -229,7 +229,7 @@ const display = (function () {
             gameFlow.playRound(row, column);
         }
     };
-})()
+})();
 
 // display Tests
 display.renderGameboard()
@@ -238,4 +238,4 @@ display.renderGameboard()
 // Event Listeners
 const domGameboard = document.querySelector("#gameboard");
 
-domGameboard.addEventListener("click", display.addMarker)
+domGameboard.addEventListener("click", display.addMarker);
