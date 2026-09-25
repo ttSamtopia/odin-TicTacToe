@@ -219,6 +219,13 @@ const display = (function () {
                 }
             };
         },
+
+        addMarker (event) {
+            let domCell = event.target.closest(".cell");
+            let row = domCell.dataset.row;
+            let column = domCell.dataset.column;
+            gameFlow.playRound(row, column);
+        }
     };
 })()
 
