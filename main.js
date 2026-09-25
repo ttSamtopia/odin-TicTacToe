@@ -146,6 +146,7 @@ const gameFlow = (function () {
 
         newGame () {
             gameboard.reset();
+            display.renderGameboard();
             _currentPlayer = null;
             _shuffleStartingPlayer();
             _gameOver = false;
@@ -176,6 +177,7 @@ const gameFlow = (function () {
                 if (_gameOver) { throw Error("Game is already over"); }
                 if (_currentPlayer === null) { throw Error("Start a new game first"); }
                 gameboard.placeMarker(_currentPlayer.marker, row, column);
+                display.renderGameboard()
                 if (this.checkWin(row, column)) {
                     _gameOver = true;
                     _currentPlayer.addScore();
