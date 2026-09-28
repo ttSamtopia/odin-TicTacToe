@@ -3,7 +3,16 @@ let player1 = createPlayer("Human", "X", true);
 let player2 = createPlayer("CPU", "O", false);
 
 const domPlayerSettings = document.querySelector("dialog");
+const domPlayer1MarkerSelect = document.querySelector("#player1-settings .marker-select");
+const domPlayer2MarkerSelect = document.querySelector("#player2-settings .marker-select");
 const domGameboard = document.querySelector("#gameboard");
+
+const SVG = {
+	X: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M22 2 2 22"/><path d="m2 2 20 20"/></svg>`,
+	O: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle preview-icon"><circle cx="12" cy="12" r="10"/></svg>`,
+	human: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user preview-icon"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+	robot: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot preview-icon"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>`
+};
 
 
 // gameboard factory
@@ -217,9 +226,9 @@ const display = (function () {
 					cell.innerHTML = "";
 				}
 				else if (cellContent === "X") {
-					cell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M22 2 2 22"/><path d="m2 2 20 20"/></svg>`;
+					cell.innerHTML = SVG.X;
 				} else {
-					cell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle preview-icon"><circle cx="12" cy="12" r="10"/></svg>`;
+					cell.innerHTML = SVG.O;
 				}
 			};
 		},
@@ -231,9 +240,39 @@ const display = (function () {
 			gameFlow.playRound(row, column);
 		},
 
-		setupPlayerSettings () {
-			domPlayerSettings.showModal();
+		toggleHumanSelect (e) {
+			const domButton = e.target.closest(".human-select");
+			if (domButton === null) { return; }
+			if (domButton.dataset.human === "true") {
+				domButton.dataset.human = "false";
+				domButton.innerHTML = SVG.robot;
+			} else {
+				domButton.dataset.human = "true";
+				domButton.innerHTML = SVG.human;
+			}
+		},
 
+		toggleMarkerSelect (e) {
+			const domButton = e.target.closest(".marker-select");
+			if (domButton === null) { return; }
+			let currentMarker;
+			let oppositeMarker;
+			if (domButton.dataset.marker === "X") {
+				currentMarker = "X";
+				oppositeMarker = "O";
+			} else {
+				currentMarker = "O";
+				oppositeMarker = "X";
+			}
+			domButton.dataset.marker = oppositeMarker;
+			domButton.innerHTML = SVG[oppositeMarker];
+			if (domButton === domPlayer1MarkerSelect) {
+				domPlayer2MarkerSelect.dataset.marker = currentMarker;
+				domPlayer2MarkerSelect.innerHTML = SVG[currentMarker];
+			} else {
+				domPlayer1MarkerSelect.dataset.marker = currentMarker;
+				domPlayer1MarkerSelect.innerHTML = SVG[currentMarker];
+			}
 		}
 	};
 })();
@@ -241,6 +280,9 @@ const display = (function () {
 
 // Page Setup
 display.renderGameboard()
-display.setupPlayerSettings();
+domPlayerSettings.showModal();
+
+domPlayerSettings.addEventListener("click", display.toggleHumanSelect);
+domPlayerSettings.addEventListener("click", display.toggleMarkerSelect);
 
 domGameboard.addEventListener("click", display.addMarker);

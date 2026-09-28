@@ -44,6 +44,7 @@ form label {
 label, input {
 	text-align: center;
 	align-self: center;
+	border-radius: 15px;
 }
 
 .form-buttons {
@@ -57,6 +58,14 @@ label, input {
 
 .form-buttons button {
 	aspect-ratio: 1/1;
+	border-radius: 15px;
+}
+
+.form-buttons svg {
+	width: 75%;
+	height: 75%;
+	color: grey;
+	pointer-events: none;
 }
 
 input[type="color"] {
