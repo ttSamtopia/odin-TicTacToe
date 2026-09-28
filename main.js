@@ -5,6 +5,9 @@ const domPlayer1MarkerSelect = document.querySelector("#player1-settings .marker
 const domPlayer2MarkerSelect = document.querySelector("#player2-settings .marker-select");
 const domPlayerSettingsForm = document.querySelector("form");
 const domGameboard = document.querySelector("#gameboard");
+const domPlayer1Info = document.querySelector("#player1-info");
+const domPlayer2Info = document.querySelector("#player2-info");
+const domScore = document.querySelector("#score");
 
 const SVG = {
 	X: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M22 2 2 22"/><path d="m2 2 20 20"/></svg>`,
@@ -243,6 +246,7 @@ const gameFlow = (function () {
 		newGame () {
 			gameboard.reset();
 			display.renderGameboard();
+			display.renderScore(_player1.getScore(), _player2.getScore());
 			_currentPlayer = null;
 			_shuffleStartingPlayer();
 			_gameOver = false;
@@ -351,6 +355,10 @@ const display = (function () {
 			};
 		},
 
+		renderScore (player1, player2) {
+			domScore.textContent = `${player1} - ${player2}`;
+		},
+
 		addMarker (event) {
 			let domCell = event.target.closest(".cell");
 			let row = domCell.dataset.row;
@@ -395,7 +403,6 @@ const display = (function () {
 
 		playerFormHandler (e) {
 			e.preventDefault();
-			domPlayerSettings.close();
 			const form = e.target.elements;
 			gameFlow.setupPlayer(
 				1,
@@ -411,6 +418,15 @@ const display = (function () {
 				form["player2-human-select"].value === "human",
 				form["player2-color"].value,
 			);
+
+			domPlayer1Info.querySelector("h1").textContent = form["player1-name"].value;
+			domPlayer1Info.querySelector(".player-header div").innerHTML = form["player1-human-select"].value === "human" ? SVG.human : SVG.robot;
+			domPlayer1Info.querySelector(".player-marker").innerHTML = form["player1-marker-select"].value === "X" ? SVG.X : SVG.O;
+			domPlayer2Info.querySelector("h1").textContent = form["player2-name"].value;
+			domPlayer2Info.querySelector(".player-header div").innerHTML = form["player2-human-select"].value === "human" ? SVG.human : SVG.robot;
+			domPlayer2Info.querySelector(".player-marker").innerHTML = form["player2-marker-select"].value === "X" ? SVG.X : SVG.O;
+
+			domPlayerSettings.close();
 			gameFlow.newGame();
 		},
 	};
