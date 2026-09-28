@@ -1,7 +1,7 @@
 :root {
 	--modal-spacing: 20px;
-	--player1-color: #000000;
-	--player1-color: #000000;
+	--X-color: #000000;
+	--O-color: #000000;
 }
 
 * {
@@ -101,4 +101,12 @@ form > button {
 .cell > svg {
 	height: 50%;
 	width: 50%;
+}
+
+.cell-X {
+	color: var(--X-color);
+}
+
+.cell-O {
+	color: var(--O-color);
 }

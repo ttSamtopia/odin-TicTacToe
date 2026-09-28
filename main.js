@@ -1,10 +1,9 @@
 // Global Variables
-let player1 = createPlayer("Human", "X", true);
-let player2 = createPlayer("CPU", "O", false);
-
+const domRoot = document.querySelector(":root");
 const domPlayerSettings = document.querySelector("dialog");
 const domPlayer1MarkerSelect = document.querySelector("#player1-settings .marker-select");
 const domPlayer2MarkerSelect = document.querySelector("#player2-settings .marker-select");
+const domPlayerSettingsForm = document.querySelector("form");
 const domGameboard = document.querySelector("#gameboard");
 
 const SVG = {
@@ -18,9 +17,9 @@ const SVG = {
 // gameboard factory
 const gameboard = (function () {
 	const _gameboard = [
-		["X", "O", "X"],
-		["O", "X", "O"],
-		["X", "O", "X"],
+		["", "", ""],
+		["", "", ""],
+		["", "", ""],
 	]
 
 	return {
@@ -83,16 +82,18 @@ function createPlayer (name, marker, userControlled = true) {
 const gameFlow = (function () {
 	let _currentPlayer = null;
 	let _gameOver = false;
+	let _player1;
+	let _player2;
 
 	function _shuffleStartingPlayer () {
 		if (_currentPlayer !== null) { throw Error("Game has already started"); }
 		const randomNumber = Math.floor(Math.random() * 2) + 1
-		if (randomNumber === 1) { _currentPlayer = player1; }
-		else if (randomNumber === 2) { _currentPlayer = player2; }
+		if (randomNumber === 1) { _currentPlayer = _player1; }
+		else if (randomNumber === 2) { _currentPlayer = _player2; }
 	};
 
 	function _switchCurrentPlayer () {
-		_currentPlayer = _currentPlayer === player1 ? player2 : player1;
+		_currentPlayer = _currentPlayer === _player1 ? _player2 : _player1;
 	};
 
 	function _checkMatchingMarker (val1, val2, val3) {
@@ -193,20 +194,31 @@ const gameFlow = (function () {
 					_gameOver = true;
 					_currentPlayer.addScore();
 					console.log(`${_currentPlayer.name} won!`);
-					console.log(`Score is ${player1.getScore()} - ${player2.getScore()}`);
+					console.log(`Score is ${_player1.getScore()} - ${_player2.getScore()}`);
 					return;
 				}
 				else if (this.checkTie()) {
 					_gameOver = true;
 					console.log("It's a tie!");
-					console.log(`Score is ${player1.getScore()} - ${player2.getScore()}`);
+					console.log(`Score is ${_player1.getScore()} - ${_player2.getScore()}`);
 					return;
 				}
 				_switchCurrentPlayer();
 				console.log(gameboard.getGameboard());
 			} catch (error) {
-				console.log(error.message);
+				throw Error(error.message);
 			}
+		},
+
+		setupPlayer (playerNumber, name, marker, userControlled, color) {
+			if (playerNumber === 1) {
+				_player1 = createPlayer(name, marker, userControlled);
+			} else if (playerNumber === 2) {
+				_player2 = createPlayer(name, marker, userControlled);
+			} else {
+				throw Error("Not a valid player number")
+			}
+			domRoot.style.setProperty(`--${marker}-color`, color);
 		},
 	};
 })();
@@ -227,8 +239,10 @@ const display = (function () {
 				}
 				else if (cellContent === "X") {
 					cell.innerHTML = SVG.X;
+					cell.classList.add("cell-X");
 				} else {
 					cell.innerHTML = SVG.O;
+					cell.classList.add("cell-O")
 				}
 			};
 		},
@@ -243,11 +257,11 @@ const display = (function () {
 		toggleHumanSelect (e) {
 			const domButton = e.target.closest(".human-select");
 			if (domButton === null) { return; }
-			if (domButton.dataset.human === "true") {
-				domButton.dataset.human = "false";
+			if (domButton.value === "human") {
+				domButton.value = "bot";
 				domButton.innerHTML = SVG.robot;
 			} else {
-				domButton.dataset.human = "true";
+				domButton.value = "human";
 				domButton.innerHTML = SVG.human;
 			}
 		},
@@ -257,23 +271,44 @@ const display = (function () {
 			if (domButton === null) { return; }
 			let currentMarker;
 			let oppositeMarker;
-			if (domButton.dataset.marker === "X") {
+			if (domButton.value === "X") {
 				currentMarker = "X";
 				oppositeMarker = "O";
 			} else {
 				currentMarker = "O";
 				oppositeMarker = "X";
 			}
-			domButton.dataset.marker = oppositeMarker;
+			domButton.value = oppositeMarker;
 			domButton.innerHTML = SVG[oppositeMarker];
 			if (domButton === domPlayer1MarkerSelect) {
-				domPlayer2MarkerSelect.dataset.marker = currentMarker;
+				domPlayer2MarkerSelect.value = currentMarker;
 				domPlayer2MarkerSelect.innerHTML = SVG[currentMarker];
 			} else {
-				domPlayer1MarkerSelect.dataset.marker = currentMarker;
+				domPlayer1MarkerSelect.value = currentMarker;
 				domPlayer1MarkerSelect.innerHTML = SVG[currentMarker];
 			}
-		}
+		},
+
+		playerFormHandler (e) {
+			e.preventDefault();
+			domPlayerSettings.close();
+			const form = e.target.elements;
+			gameFlow.setupPlayer(
+				1,
+				form["player1-name"].value,
+				form["player1-marker-select"].value,
+				form["player1-human-select"].value === "human",
+				form["player1-color"].value,
+			);
+			gameFlow.setupPlayer(
+				2,
+				form["player2-name"].value,
+				form["player2-marker-select"].value,
+				form["player2-human-select"].value === "human",
+				form["player2-color"].value,
+			);
+			gameFlow.newGame();
+		},
 	};
 })();
 
@@ -282,7 +317,8 @@ const display = (function () {
 display.renderGameboard()
 domPlayerSettings.showModal();
 
-domPlayerSettings.addEventListener("click", display.toggleHumanSelect);
-domPlayerSettings.addEventListener("click", display.toggleMarkerSelect);
+domPlayerSettingsForm.addEventListener("click", display.toggleHumanSelect);
+domPlayerSettingsForm.addEventListener("click", display.toggleMarkerSelect);
+domPlayerSettingsForm.addEventListener("submit", display.playerFormHandler);
 
 domGameboard.addEventListener("click", display.addMarker);
