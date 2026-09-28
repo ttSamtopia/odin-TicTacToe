@@ -1,3 +1,9 @@
+:root {
+	--modal-spacing: 20px;
+	--player1-color: #000000;
+	--player1-color: #000000;
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -10,9 +16,59 @@ body {
 }
 
 dialog {
-	min-width: 50vw;
-	min-height: 50vh;
 	margin: auto;
+	border-radius: 15px;
+	width: 600px;
+	padding: var(--modal-spacing);
+}
+
+form {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 1fr min-content;
+	gap: var(--modal-spacing);
+}
+
+form > div {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--modal-spacing) / 2);
+}
+
+form label {
+	display: flex;
+	flex-direction: column;
+	text-wrap: nowrap;
+}
+
+label, input {
+	text-align: center;
+	align-self: center;
+}
+
+.form-buttons {
+	display: flex;
+	gap: calc(var(--modal-spacing) / 2);
+}
+
+.form-buttons > * {
+	flex: 1 0 0;
+}
+
+.form-buttons button {
+	aspect-ratio: 1/1;
+}
+
+input[type="color"] {
+	width: 150px;
+	height: 50px
+}
+
+form > button {
+	grid-area: 2 / 1 / span 1 / span 2;
+	width: min-content;
+	justify-self: center;
+	padding: 5px 10px;
 }
 
 #gameboard {
