@@ -1,3 +1,11 @@
+// Global Variables
+let player1 = createPlayer("Human", "X", true);
+let player2 = createPlayer("CPU", "O", false);
+
+const domPlayerSettings = document.querySelector("dialog");
+const domGameboard = document.querySelector("#gameboard");
+
+
 // gameboard factory
 const gameboard = (function () {
 	const _gameboard = [
@@ -60,12 +68,6 @@ function createPlayer (name, marker, userControlled = true) {
 		},
 	};
 }
-
-// Player tests
-let player1 = createPlayer("Human", "X", true);
-console.log(player1);
-let player2 = createPlayer("CPU", "O", false);
-console.log(player2);
 
 
 // gameFlow factory
@@ -227,20 +229,18 @@ const display = (function () {
 			let row = domCell.dataset.row;
 			let column = domCell.dataset.column;
 			gameFlow.playRound(row, column);
+		},
+
+		setupPlayerSettings () {
+			domPlayerSettings.showModal();
+
 		}
 	};
 })();
 
-// display Tests
+
+// Page Setup
 display.renderGameboard()
-
-
-// Player Settings Modal
-const domPlayerSettings = document.querySelector("dialog");
-domPlayerSettings.showModal();
-
-
-// Event Listeners
-const domGameboard = document.querySelector("#gameboard");
+display.setupPlayerSettings();
 
 domGameboard.addEventListener("click", display.addMarker);
