@@ -97,54 +97,138 @@ const gameFlow = (function () {
 	};
 
 	function _checkMatchingMarker (val1, val2, val3) {
+		if (val1 === "" || val2 === "" || val3 === "") { return false; }
 		if (val1 === val2 && val2 === val3) { return true; }
 		else { return false; }
 	};
 
 	function _checkColumnWin (column) {
-		if (_checkMatchingMarker(gameboard.getCell(1, column), gameboard.getCell(2, column), gameboard.getCell(3, column))) {
-			return true;
+		let cell1 = gameboard.getCell(1, column);
+		let cell2 = gameboard.getCell(2, column);
+		let cell3 = gameboard.getCell(3, column);
+		if (_checkMatchingMarker(cell1, cell2, cell3)) {
+			return [true];
 		}
-		return false;
+		return [false, {1: cell1, 2: cell2, 3: cell3}];
 	};
 
 	function _checkRowWin (row) {
-		if (_checkMatchingMarker(gameboard.getCell(row, 1), gameboard.getCell(row, 2), gameboard.getCell(row, 3))) {
-			return true;
-		} else {
-			return false;
+		let cell1 = gameboard.getCell(row, 1);
+		let cell2 = gameboard.getCell(row, 2);
+		let cell3 = gameboard.getCell(row, 3);
+		if (_checkMatchingMarker(cell1, cell2, cell3)) {
+			return [true];
 		}
+		return [false, {1: cell1, 2: cell2, 3: cell3}];
 	};
 
 	function _checkDiagonalWin (row, column) {
 		const cordsString = `${row},${column}`;
 		if (cordsString === "2,2") {
-			if (
-				_checkMatchingMarker(gameboard.getCell(1,1), gameboard.getCell(2,2), gameboard.getCell(3,3)) || _checkMatchingMarker(gameboard.getCell(1,3), gameboard.getCell(2,2), gameboard.getCell(3,1))
-			) {
-				return true;
-			} else {
-				return false;
+			let a1 = gameboard.getCell(1, 1);
+			let a2 = gameboard.getCell(2, 2);
+			let a3 = gameboard.getCell(3, 3);
+			let b1 = gameboard.getCell(1, 3);
+			let b2 = gameboard.getCell(2, 2);
+			let b3 = gameboard.getCell(3, 1);
+			if (_checkMatchingMarker(a1, a2, a3) || _checkMatchingMarker(b1, b2, b3)) {
+				return [true];
 			}
+			return [false, {1: a1, 2: a2, 3: a3}, {1: b1, 2: b2, 3: b3}];
 		} else if (cordsString === "1,1" || cordsString === "3,3") {
-			if (
-				_checkMatchingMarker(gameboard.getCell(1,1), gameboard.getCell(2,2), gameboard.getCell(3,3))
-			) {
-				return true;
-			} else {
-				return false;
+			let cell1 = gameboard.getCell(1, 1);
+			let cell2 = gameboard.getCell(2, 2);
+			let cell3 = gameboard.getCell(3, 3);
+			if (_checkMatchingMarker(cell1, cell2, cell3)) {
+				return [true];
 			}
+			return [false, {1: cell1, 2: cell2, 3: cell3}];
 		} else if (cordsString === "1,3" || cordsString === "3,1") {
-			if (
-				_checkMatchingMarker(gameboard.getCell(1,3), gameboard.getCell(2,2), gameboard.getCell(3,1))
-			) {
-				return true;
-			} else {
-				return false;
+			let cell1 = gameboard.getCell(1, 3);
+			let cell2 = gameboard.getCell(2, 2);
+			let cell3 = gameboard.getCell(3, 1);
+			if (_checkMatchingMarker(cell1, cell2, cell3)) {
+				return [true];
 			}
-		} else {
-			return false;
+			return [false, {1: cell1, 2: cell2, 3: cell3}];
 		}
+		return [false];
+	};
+
+	function _countCellContent (cells) {
+		const count = {
+			"X": 0,
+			"O": 0,
+		};
+		for (let cell of cells) {
+			if (cell === "") { continue; }
+			count[cell]++
+		}
+		return count;
+	};
+
+	function _playRandomMove () {
+		let triedCells = [];
+		let availableCellFound = false;
+		while (!availableCellFound) {
+			let row = Math.floor(Math.random() * 3) + 1;
+			let column = Math.floor(Math.random() * 3) + 1;
+			if (triedCells.includes(`${row},${column}`)) { continue };
+			try {
+				gameFlow.playRound(row, column);
+				availableCellFound = true;
+			} catch (error) {
+				triedCells.push(`${row},${column}`)
+			}
+		}
+	};
+
+	function _getBestMove () {
+		const currentBoard = gameboard.getGameboard();
+		const possibleMoves = [];
+		const diagonalSquares = ["1,1", "1,3", "2,2", "3,1", "3,3"];
+		for (let row = 1; row < 4; row++) {
+			for (let column = 1; column < 4; column++) {
+				if (currentBoard[row-1][column-1] === "") {
+					let rowCells = _checkRowWin(row)[1];
+					let rowCount = _countCellContent([rowCells[1], rowCells[2], rowCells[3]]);
+					if (rowCount.X === 2 || rowCount.O === 2) {
+						possibleMoves.push(`${row},${column}`);
+					}
+					let columnCells = _checkColumnWin(column)[1];
+					let columnCount = _countCellContent([columnCells[1], columnCells[2], columnCells[3]]);
+					if (columnCount.X === 2 || columnCount.O === 2) {
+						possibleMoves.push(`${row},${column}`);
+					}
+					if (diagonalSquares.includes(`${row},${column}`)) {
+						let diagonalResult = _checkDiagonalWin(row, column);
+						for (let i = 1; i < diagonalResult.length; i++) {
+							let diagonalCells = diagonalResult[i];
+							let diagonalCount = _countCellContent([diagonalCells[1], diagonalCells[2], diagonalCells[3]]);
+							if (diagonalCount.X === 2 || diagonalCount.O === 2) {
+								possibleMoves.push(`${row},${column}`);
+							}
+						}
+					}
+				}
+			}
+		};
+		const possibleMovesCount = {};
+		for (let move of possibleMoves) {
+			if (!possibleMovesCount[move]) {
+				possibleMovesCount[move] = 1;
+			} else {
+				possibleMovesCount[move] = possibleMovesCount[move]+1;
+			}
+		};
+		for (let i = 3; i > 0; i--) {
+			for (let move in possibleMovesCount) {
+				if (possibleMovesCount[move] === i) {
+					return move.split(",");
+				}
+			}
+		};
+		return false;
 	}
 
 	return {
@@ -164,10 +248,13 @@ const gameFlow = (function () {
 			_gameOver = false;
 			console.log(`Starting Player: ${_currentPlayer.name}`);
 			console.log(gameboard.getGameboard());
+			if (!_currentPlayer.userControlled) {
+				gameFlow.calcRobotRound();
+			}
 		},
 
 		checkWin (row, column) {
-			if (_checkColumnWin(column) || _checkRowWin(row) || _checkDiagonalWin(row, column)) {
+			if (_checkColumnWin(column)[0] || _checkRowWin(row)[0] || _checkDiagonalWin(row, column)[0]) {
 				return true;
 			} else {
 				return false;
@@ -182,6 +269,20 @@ const gameFlow = (function () {
 				}
 			}
 			return true;
+		},
+
+		calcRobotRound () {
+			const randomNumber = Math.floor(Math.random() * 10) + 1
+			if (randomNumber === 1) {
+				_playRandomMove()
+			} else {
+				let result = _getBestMove()
+				if (!result) {
+					_playRandomMove()
+				} else {
+					gameFlow.playRound(result[0], result[1]);
+				}
+			}
 		},
 
 		playRound (row, column) {
@@ -204,6 +305,9 @@ const gameFlow = (function () {
 					return;
 				}
 				_switchCurrentPlayer();
+				if (!_currentPlayer.userControlled) {
+					setTimeout(gameFlow.calcRobotRound, 1000)
+				}
 				console.log(gameboard.getGameboard());
 			} catch (error) {
 				throw Error(error.message);
