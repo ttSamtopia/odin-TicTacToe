@@ -22,6 +22,50 @@
         <div class="cell" data-row="3" data-column="3"></div>
     </div>
 
+    <dialog id="player-settings">
+        <form>
+            <div id="player1-settings">
+                <label>
+                    Player Name:
+                    <input name="player1-name" class="name-input" type="text" required>
+                </label>
+                <label>
+                    Human or Bot?
+                    <button type="button" name="player1-human-select" class="human-select" data-human="true" data-difficulty="0"></button>
+                </label>
+                <label>
+                    X or O?
+                    <button type="button" name="player1-marker-select" class="marker-select" data-marker="X"></button>
+                </label>
+                <label>
+                    Choose Marker Color:
+                    <input name="player1-color" class="color-input" type="color">
+                </label>
+            </div>
+
+            <div id="player2-settings">
+                <label>
+                    Player Name:
+                    <input name="player2-name" class="name-input" type="text" required>
+                </label>
+                <label>
+                    Human or Bot?
+                    <button type="button" name="player2-human-select" class="human-select" data-human="true" data-difficulty="0"></button>
+                </label>
+                <label>
+                    X or O?
+                    <button type="button" name="player2-marker-select" class="marker-select" data-marker="O"></button>
+                </label>
+                <label>
+                    Choose Marker Color:
+                    <input name="player2-color" class="color-input" type="color">
+                </label>
+            </div>
+
+            <button type="submit">Save</button>
+        </form>
+    </dialog>
+
     <script src="main.js"></script>
 </body>
 </html>

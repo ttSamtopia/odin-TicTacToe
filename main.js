@@ -235,6 +235,11 @@ const display = (function () {
 display.renderGameboard()
 
 
+// Player Settings Modal
+const domPlayerSettings = document.querySelector("dialog");
+domPlayerSettings.showModal();
+
+
 // Event Listeners
 const domGameboard = document.querySelector("#gameboard");
 

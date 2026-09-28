@@ -9,6 +9,12 @@ body {
     padding-top: min(5vh, 5vw);
 }
 
+dialog {
+    min-width: 50vw;
+    min-height: 50vh;
+    margin: auto;
+}
+
 #gameboard {
     height: min(90vh, 90vw);
     width: min(90vh, 90vw);
