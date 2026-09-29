@@ -3,6 +3,12 @@
 	--page-spacing: 40px;
 	--X-color: #000000;
 	--O-color: #000000;
+	--background-color: #f4f1ec;
+	--surface-color: #ffffff;
+	--text-color: #2b2d42;
+	--muted-color: #8d8a85;
+	--line-color: #c9c4bb;
+	--accent-color: #3d5a80;
 }
 
 * {
@@ -12,23 +18,56 @@
 }
 
 body {
-	height: 100vh;
-	width: 100vw;
+	min-height: 100vh;
 	padding: var(--page-spacing);
 	gap: var(--page-spacing);
 	display: flex;
 	text-align: center;
+	font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	color: var(--text-color);
+	background-color: var(--background-color);
 }
 
 body > * {
 	flex: 1 1 0;
 }
 
+button,
+input {
+	font: inherit;
+	color: inherit;
+}
+
+button {
+	padding: 8px 16px;
+	border: 2px solid var(--line-color);
+	border-radius: 10px;
+	background-color: var(--surface-color);
+	transition: background-color 0.15s, border-color 0.15s;
+}
+
+button:hover {
+	border-color: var(--accent-color);
+}
+
+button:focus-visible,
+input:focus-visible {
+	outline: 3px solid var(--accent-color);
+}
+
 dialog {
 	margin: auto;
+	border: none;
 	border-radius: 15px;
-	width: 600px;
+	width: min(600px, 100% - 32px);
 	padding: var(--modal-spacing);
+	color: var(--text-color);
+	background-color: var(--surface-color);
+	box-shadow: 0 10px 30px rgb(0 0 0 / 20%);
+}
+
+dialog::backdrop {
+	background: rgb(43 45 66 / 50%);
 }
 
 form {
@@ -47,6 +86,7 @@ form > div {
 form label {
 	display: flex;
 	flex-direction: column;
+	gap: 6px;
 	text-wrap: nowrap;
 }
 
@@ -54,6 +94,13 @@ label, input:not([type="color"]) {
 	text-align: center;
 	align-self: center;
 	border-radius: 15px;
+}
+
+input[type="text"] {
+	padding: 8px 12px;
+	border: 2px solid var(--line-color);
+	border-radius: 10px;
+	background-color: var(--surface-color);
 }
 
 .form-buttons {
@@ -68,29 +115,43 @@ label, input:not([type="color"]) {
 .form-buttons button {
 	aspect-ratio: 1/1;
 	border-radius: 15px;
+	padding: 0;
 }
 
 .form-buttons svg {
 	width: 75%;
 	height: 75%;
-	color: grey;
+	color: var(--muted-color);
 	pointer-events: none;
 }
 
 input[type="color"] {
 	width: 150px;
-	height: 50px
+	height: 50px;
+}
+
+form > button,
+#message-modal button {
+	color: var(--surface-color);
+	background-color: var(--accent-color);
+	border-color: var(--accent-color);
+	padding: 8px 24px;
+}
+
+form > button:hover,
+#message-modal button:hover {
+	background-color: var(--text-color);
+	border-color: var(--text-color);
 }
 
 form > button {
 	grid-area: 2 / 1 / span 1 / span 2;
 	width: min-content;
 	justify-self: center;
-	padding: 5px 10px;
 }
 
 .player-info {
-	font-size: 36px;
+	font-size: 2rem;
 	margin: auto;
 	display: flex;
 	flex-direction: column;
@@ -102,12 +163,13 @@ form > button {
 .player-header {
 	display: flex;
 	align-items: stretch;
+	gap: 8px;
 }
 
 .player-header svg {
 	height: 50%;
 	width: auto;
-	opacity: 50%;
+	color: var(--muted-color);
 }
 
 .player-marker {
@@ -123,39 +185,49 @@ form > button {
 #main-section {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
+	justify-content: center;
 	gap: var(--page-spacing)
 }
 
 #score {
-	font-size: 60px;
+	font-size: clamp(2.5rem, 5vw, 3.75rem);
+	letter-spacing: 0.1em;
 }
 
 #gameboard {
 	aspect-ratio: 1/1;
-	width: 100%;
+	width: min(100%, 70vh);
+	align-self: center;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(3, 1fr);
+	border-radius: 15px;
+	overflow: hidden;
 }
 
 .cell {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition: background-color 0.15s;
+}
+
+.cell:empty:hover {
+	background-color: rgb(61 90 128 / 8%);
 }
 
 .cell:not([data-row="3"]) {
-	border-bottom: 3px solid black;
+	border-bottom: 3px solid var(--line-color);
 }
 
 .cell:not([data-column="3"]) {
-	border-right: 3px solid black;
+	border-right: 3px solid var(--line-color);
 }
 
 .cell > svg {
 	height: 50%;
 	width: 50%;
+	pointer-events: none;
 }
 
 .marker-X {
@@ -166,12 +238,20 @@ form > button {
 	color: var(--O-color);
 }
 
-#menu-buttons {
-	display: flex;
-	gap: var(--modal-spacing);
-	justify-content: center;
+#message-modal {
+	width: min(360px, 100% - 32px);
 }
 
-#menu-buttons button {
-	padding: 5px 10px;
+#message-modal h1 {
+	font-size: 1.75rem;
+	margin-bottom: 5px;
+}
+
+#message-modal p {
+	font-size: 1.25rem;
+	color: var(--muted-color);
+}
+
+#message-modal button {
+	margin-top: 20px;
 }
