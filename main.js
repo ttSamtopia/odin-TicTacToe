@@ -2,6 +2,7 @@
 const domRoot = document.querySelector(":root");
 const domPlayerSettings = document.querySelector("dialog");
 const domModals = document.querySelectorAll("dialog");
+const domMessageModal = document.querySelector("#message-modal");
 const domPlayer1MarkerSelect = document.querySelector("#player1-settings .marker-select");
 const domPlayer2MarkerSelect = document.querySelector("#player2-settings .marker-select");
 const domPlayerSettingsForm = document.querySelector("form");
@@ -253,11 +254,11 @@ const gameFlow = (function () {
 			_currentPlayer = null;
 			_shuffleStartingPlayer();
 			_gameOver = false;
-			console.log(`Starting Player: ${_currentPlayer.name}`);
-			console.log(gameboard.getGameboard());
-			if (!_currentPlayer.userControlled) {
-				gameFlow.calcRobotRound();
-			}
+			display.createModal("New Game", `${_currentPlayer.name} starts!`, "Start", () => {
+				if (!_currentPlayer.userControlled) {
+					gameFlow.calcRobotRound();
+				}
+			});
 		},
 
 		checkWin (row, column) {
@@ -302,21 +303,18 @@ const gameFlow = (function () {
 					_gameOver = true;
 					_currentPlayer.addScore();
 					display.renderScore(_player1.getScore(), _player2.getScore());
-					console.log(`${_currentPlayer.name} won!`);
-					console.log(`Score is ${_player1.getScore()} - ${_player2.getScore()}`);
+					display.createModal(`${_currentPlayer.name} won!`, `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", gameFlow.newGame);
 					return;
 				}
 				else if (this.checkTie()) {
 					_gameOver = true;
-					console.log("It's a tie!");
-					console.log(`Score is ${_player1.getScore()} - ${_player2.getScore()}`);
+					display.createModal("It's a tie!", `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", gameFlow.newGame);
 					return;
 				}
 				_switchCurrentPlayer();
 				if (!_currentPlayer.userControlled) {
 					gameFlow.calcRobotRound();
 				}
-				console.log(gameboard.getGameboard());
 			} catch (error) {
 				throw Error(error.message);
 			}
@@ -365,11 +363,44 @@ const display = (function () {
 			domScore.textContent = `${player1} - ${player2}`;
 		},
 
+		createModal (heading, message, buttonText = "Close", buttonAction) {
+			domMessageModal.innerHTML = "";
+			const domHeading = document.createElement("h1");
+			domHeading.textContent = heading;
+			domMessageModal.append(domHeading);
+			if (message) {
+				const domMessage = document.createElement("p");
+				domMessage.textContent = message;
+				domMessageModal.append(domMessage);
+			}
+			const domButton = document.createElement("button");
+			domButton.textContent = buttonText;
+			domButton.addEventListener("click", () => {
+				domMessageModal.close();
+				if (buttonAction) { buttonAction(); }
+			});
+			domMessageModal.append(domButton);
+			domMessageModal.showModal();
+		},
+
 		addMarker (event) {
 			let domCell = event.target.closest(".cell");
+			if (domCell === null) { return; }
 			let row = domCell.dataset.row;
 			let column = domCell.dataset.column;
-			gameFlow.playRound(row, column);
+			try {
+				gameFlow.playRound(row, column);
+			} catch (error) {
+				display.createModal("Invalid move", error.message);
+			}
+		},
+
+		newGameHandler () {
+			try {
+				gameFlow.newGame();
+			} catch (error) {
+				display.createModal("Can't start a new game", error.message);
+			}
 		},
 
 		toggleHumanSelect (e) {
@@ -461,7 +492,7 @@ domPlayerSettingsForm.addEventListener("submit", display.playerFormHandler);
 
 domGameboard.addEventListener("click", display.addMarker);
 
-domNewGameButton.addEventListener("click", gameFlow.newGame);
+domNewGameButton.addEventListener("click", display.newGameHandler);
 
 domModals.forEach((element) => {
 	element.addEventListener("keydown", (e) => {
