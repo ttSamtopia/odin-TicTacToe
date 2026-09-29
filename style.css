@@ -1,5 +1,6 @@
 :root {
 	--modal-spacing: 20px;
+	--page-spacing: 40px;
 	--X-color: #000000;
 	--O-color: #000000;
 }
@@ -12,7 +13,15 @@
 
 body {
 	height: 100vh;
-	padding-top: min(5vh, 5vw);
+	width: 100vw;
+	padding: var(--page-spacing);
+	gap: var(--page-spacing);
+	display: flex;
+	text-align: center;
+}
+
+body > * {
+	flex: 1 1 0;
 }
 
 dialog {
@@ -80,22 +89,68 @@ form > button {
 	padding: 5px 10px;
 }
 
-#gameboard {
-	height: min(90vh, 90vw);
-	width: min(90vh, 90vw);
+.player-info {
+	font-size: 36px;
 	margin: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--page-spacing);
+}
+
+.player-header {
+	display: flex;
+	align-items: stretch;
+}
+
+.player-header svg {
+	height: 50%;
+	width: auto;
+	opacity: 50%;
+}
+
+.player-marker {
+	height: 100px;
+	width: 100px;
+}
+
+.player-marker > svg {
+	height: 100%;
+	width: 100%;
+}
+
+#main-section {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	gap: var(--page-spacing)
+}
+
+#score {
+	font-size: 60px;
+}
+
+#gameboard {
+	aspect-ratio: 1/1;
+	width: 100%;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(3, 1fr);
-	background-color: black;
-	gap: 2px;
 }
 
 .cell {
-	background-color: white;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.cell:not([data-row="3"]) {
+	border-bottom: 3px solid black;
+}
+
+.cell:not([data-column="3"]) {
+	border-right: 3px solid black;
 }
 
 .cell > svg {
@@ -103,10 +158,10 @@ form > button {
 	width: 50%;
 }
 
-.cell-X {
+.marker-X {
 	color: var(--X-color);
 }
 
-.cell-O {
+.marker-O {
 	color: var(--O-color);
 }

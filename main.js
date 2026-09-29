@@ -347,10 +347,10 @@ const display = (function () {
 				}
 				else if (cellContent === "X") {
 					cell.innerHTML = SVG.X;
-					cell.classList.add("cell-X");
+					cell.classList.add("marker-X");
 				} else {
 					cell.innerHTML = SVG.O;
-					cell.classList.add("cell-O")
+					cell.classList.add("marker-O")
 				}
 			};
 		},
@@ -421,10 +421,22 @@ const display = (function () {
 
 			domPlayer1Info.querySelector("h1").textContent = form["player1-name"].value;
 			domPlayer1Info.querySelector(".player-header div").innerHTML = form["player1-human-select"].value === "human" ? SVG.human : SVG.robot;
-			domPlayer1Info.querySelector(".player-marker").innerHTML = form["player1-marker-select"].value === "X" ? SVG.X : SVG.O;
+			if (form["player1-marker-select"].value === "X") {
+				domPlayer1Info.querySelector(".player-marker").innerHTML = SVG.X;
+				domPlayer1Info.querySelector(".player-marker").classList.add("marker-X");
+			} else {
+				domPlayer1Info.querySelector(".player-marker").innerHTML = SVG.O;
+				domPlayer1Info.querySelector(".player-marker").classList.add("marker-O");
+			}
 			domPlayer2Info.querySelector("h1").textContent = form["player2-name"].value;
 			domPlayer2Info.querySelector(".player-header div").innerHTML = form["player2-human-select"].value === "human" ? SVG.human : SVG.robot;
-			domPlayer2Info.querySelector(".player-marker").innerHTML = form["player2-marker-select"].value === "X" ? SVG.X : SVG.O;
+			if (form["player2-marker-select"].value === "X") {
+				domPlayer2Info.querySelector(".player-marker").innerHTML = SVG.X;
+				domPlayer2Info.querySelector(".player-marker").classList.add("marker-X");
+			} else {
+				domPlayer2Info.querySelector(".player-marker").innerHTML = SVG.O;
+				domPlayer2Info.querySelector(".player-marker").classList.add("marker-O");
+			}
 
 			domPlayerSettings.close();
 			gameFlow.newGame();
