@@ -50,7 +50,7 @@ form label {
 	text-wrap: nowrap;
 }
 
-label, input {
+label, input:not([type="color"]) {
 	text-align: center;
 	align-self: center;
 	border-radius: 15px;
@@ -164,4 +164,14 @@ form > button {
 
 .marker-O {
 	color: var(--O-color);
+}
+
+#menu-buttons {
+	display: flex;
+	gap: var(--modal-spacing);
+	justify-content: center;
+}
+
+#menu-buttons button {
+	padding: 5px 10px;
 }

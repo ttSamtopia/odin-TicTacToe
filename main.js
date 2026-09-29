@@ -1,6 +1,7 @@
 // Global Variables
 const domRoot = document.querySelector(":root");
 const domPlayerSettings = document.querySelector("dialog");
+const domModals = document.querySelectorAll("dialog");
 const domPlayer1MarkerSelect = document.querySelector("#player1-settings .marker-select");
 const domPlayer2MarkerSelect = document.querySelector("#player2-settings .marker-select");
 const domPlayerSettingsForm = document.querySelector("form");
@@ -8,6 +9,7 @@ const domGameboard = document.querySelector("#gameboard");
 const domPlayer1Info = document.querySelector("#player1-info");
 const domPlayer2Info = document.querySelector("#player2-info");
 const domScore = document.querySelector("#score");
+const domNewGameButton = document.querySelector("#newGame-button");
 
 const SVG = {
 	X: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M22 2 2 22"/><path d="m2 2 20 20"/></svg>`,
@@ -84,7 +86,7 @@ function createPlayer (name, marker, userControlled = true) {
 // gameFlow factory
 const gameFlow = (function () {
 	let _currentPlayer = null;
-	let _gameOver = false;
+	let _gameOver = true;
 	let _player1;
 	let _player2;
 
@@ -244,6 +246,7 @@ const gameFlow = (function () {
 		},
 
 		newGame () {
+			if (!_gameOver) { throw Error("Game isn't over yet") };
 			gameboard.reset();
 			display.renderGameboard();
 			display.renderScore(_player1.getScore(), _player2.getScore());
@@ -298,6 +301,7 @@ const gameFlow = (function () {
 				if (this.checkWin(row, column)) {
 					_gameOver = true;
 					_currentPlayer.addScore();
+					display.renderScore(_player1.getScore(), _player2.getScore());
 					console.log(`${_currentPlayer.name} won!`);
 					console.log(`Score is ${_player1.getScore()} - ${_player2.getScore()}`);
 					return;
@@ -310,7 +314,7 @@ const gameFlow = (function () {
 				}
 				_switchCurrentPlayer();
 				if (!_currentPlayer.userControlled) {
-					setTimeout(gameFlow.calcRobotRound, 1000)
+					gameFlow.calcRobotRound();
 				}
 				console.log(gameboard.getGameboard());
 			} catch (error) {
@@ -347,9 +351,11 @@ const display = (function () {
 				}
 				else if (cellContent === "X") {
 					cell.innerHTML = SVG.X;
+					cell.classList.remove("marker-O");
 					cell.classList.add("marker-X");
 				} else {
 					cell.innerHTML = SVG.O;
+					cell.classList.remove("marker-X");
 					cell.classList.add("marker-O")
 				}
 			};
@@ -454,3 +460,11 @@ domPlayerSettingsForm.addEventListener("click", display.toggleMarkerSelect);
 domPlayerSettingsForm.addEventListener("submit", display.playerFormHandler);
 
 domGameboard.addEventListener("click", display.addMarker);
+
+domNewGameButton.addEventListener("click", gameFlow.newGame);
+
+domModals.forEach((element) => {
+	element.addEventListener("keydown", (e) => {
+		if (e.key === "Escape") { e.preventDefault(); };
+	});
+});
