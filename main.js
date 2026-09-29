@@ -237,10 +237,6 @@ const gameFlow = (function () {
 	}
 
 	return {
-		getCurrentPlayer () {
-			return _currentPlayer;
-		},
-
 		getGameOver () {
 			return _gameOver;
 		},
