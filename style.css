@@ -166,6 +166,10 @@ form > button {
 	gap: 8px;
 }
 
+.player-header h2 {
+	font-size: 2em;
+}
+
 .player-header svg {
 	height: 50%;
 	width: auto;
@@ -242,7 +246,7 @@ form > button {
 	width: min(360px, 100% - 32px);
 }
 
-#message-modal h1 {
+#message-modal h2 {
 	font-size: 1.75rem;
 	margin-bottom: 5px;
 }
