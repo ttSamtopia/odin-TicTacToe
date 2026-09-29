@@ -114,7 +114,7 @@ const gameFlow = (function () {
 		if (_checkMatchingMarker(cell1, cell2, cell3)) {
 			return [true];
 		}
-		return [false, {1: cell1, 2: cell2, 3: cell3}];
+		return [false, { 1: cell1, 2: cell2, 3: cell3 }];
 	}
 
 	function _checkRowWin (row) {
@@ -124,7 +124,7 @@ const gameFlow = (function () {
 		if (_checkMatchingMarker(cell1, cell2, cell3)) {
 			return [true];
 		}
-		return [false, {1: cell1, 2: cell2, 3: cell3}];
+		return [false, { 1: cell1, 2: cell2, 3: cell3 }];
 	}
 
 	function _checkDiagonalWin (row, column) {
@@ -139,7 +139,7 @@ const gameFlow = (function () {
 			if (_checkMatchingMarker(a1, a2, a3) || _checkMatchingMarker(b1, b2, b3)) {
 				return [true];
 			}
-			return [false, {1: a1, 2: a2, 3: a3}, {1: b1, 2: b2, 3: b3}];
+			return [false, { 1: a1, 2: a2, 3: a3 }, { 1: b1, 2: b2, 3: b3 }];
 		} else if (cordsString === "1,1" || cordsString === "3,3") {
 			const cell1 = gameboard.getCell(1, 1);
 			const cell2 = gameboard.getCell(2, 2);
@@ -147,7 +147,7 @@ const gameFlow = (function () {
 			if (_checkMatchingMarker(cell1, cell2, cell3)) {
 				return [true];
 			}
-			return [false, {1: cell1, 2: cell2, 3: cell3}];
+			return [false, { 1: cell1, 2: cell2, 3: cell3 }];
 		} else if (cordsString === "1,3" || cordsString === "3,1") {
 			const cell1 = gameboard.getCell(1, 3);
 			const cell2 = gameboard.getCell(2, 2);
@@ -155,7 +155,7 @@ const gameFlow = (function () {
 			if (_checkMatchingMarker(cell1, cell2, cell3)) {
 				return [true];
 			}
-			return [false, {1: cell1, 2: cell2, 3: cell3}];
+			return [false, { 1: cell1, 2: cell2, 3: cell3 }];
 		}
 		return [false];
 	}
@@ -194,7 +194,7 @@ const gameFlow = (function () {
 		const diagonalSquares = ["1,1", "1,3", "2,2", "3,1", "3,3"];
 		for (let row = 1; row < 4; row++) {
 			for (let column = 1; column < 4; column++) {
-				if (currentBoard[row-1][column-1] === "") {
+				if (currentBoard[row - 1][column - 1] === "") {
 					const rowCells = _checkRowWin(row)[1];
 					const rowCount = _countCellContent([rowCells[1], rowCells[2], rowCells[3]]);
 					if (rowCount.X === 2 || rowCount.O === 2) {
@@ -223,7 +223,7 @@ const gameFlow = (function () {
 			if (!possibleMovesCount[move]) {
 				possibleMovesCount[move] = 1;
 			} else {
-				possibleMovesCount[move] = possibleMovesCount[move]+1;
+				possibleMovesCount[move] = possibleMovesCount[move] + 1;
 			}
 		}
 		for (let i = 3; i > 0; i--) {
@@ -334,10 +334,9 @@ const display = (function () {
 				const row = cell.dataset.row;
 				const column = cell.dataset.column;
 				const cellContent = gameboard.getCell(row, column);
-				if (cellContent === "") { 
+				if (cellContent === "") {
 					cell.innerHTML = "";
-				}
-				else if (cellContent === "X") {
+				} else if (cellContent === "X") {
 					cell.innerHTML = SVG.X;
 					cell.classList.remove("marker-O");
 					cell.classList.add("marker-X");
