@@ -191,7 +191,7 @@ form > button {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	gap: var(--page-spacing)
+	gap: var(--page-spacing);
 }
 
 #score {

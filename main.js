@@ -25,7 +25,7 @@ const gameboard = (function () {
 		["", "", ""],
 		["", "", ""],
 		["", "", ""],
-	]
+	];
 
 	return {
 		getCell (row, column) {
@@ -59,7 +59,7 @@ const gameboard = (function () {
 			});
 		},
 	};
-})()
+})();
 
 
 // Player factory
@@ -92,20 +92,20 @@ const gameFlow = (function () {
 
 	function _shuffleStartingPlayer () {
 		if (_currentPlayer !== null) { throw Error("Game has already started"); }
-		const randomNumber = Math.floor(Math.random() * 2) + 1
+		const randomNumber = Math.floor(Math.random() * 2) + 1;
 		if (randomNumber === 1) { _currentPlayer = _player1; }
 		else if (randomNumber === 2) { _currentPlayer = _player2; }
-	};
+	}
 
 	function _switchCurrentPlayer () {
 		_currentPlayer = _currentPlayer === _player1 ? _player2 : _player1;
-	};
+	}
 
 	function _checkMatchingMarker (val1, val2, val3) {
 		if (val1 === "" || val2 === "" || val3 === "") { return false; }
 		if (val1 === val2 && val2 === val3) { return true; }
 		else { return false; }
-	};
+	}
 
 	function _checkColumnWin (column) {
 		const cell1 = gameboard.getCell(1, column);
@@ -115,7 +115,7 @@ const gameFlow = (function () {
 			return [true];
 		}
 		return [false, {1: cell1, 2: cell2, 3: cell3}];
-	};
+	}
 
 	function _checkRowWin (row) {
 		const cell1 = gameboard.getCell(row, 1);
@@ -125,7 +125,7 @@ const gameFlow = (function () {
 			return [true];
 		}
 		return [false, {1: cell1, 2: cell2, 3: cell3}];
-	};
+	}
 
 	function _checkDiagonalWin (row, column) {
 		const cordsString = `${row},${column}`;
@@ -158,7 +158,7 @@ const gameFlow = (function () {
 			return [false, {1: cell1, 2: cell2, 3: cell3}];
 		}
 		return [false];
-	};
+	}
 
 	function _countCellContent (cells) {
 		const count = {
@@ -167,10 +167,10 @@ const gameFlow = (function () {
 		};
 		for (const cell of cells) {
 			if (cell === "") { continue; }
-			count[cell]++
+			count[cell]++;
 		}
 		return count;
-	};
+	}
 
 	function _playRandomMove () {
 		const triedCells = [];
@@ -178,15 +178,15 @@ const gameFlow = (function () {
 		while (!availableCellFound) {
 			const row = Math.floor(Math.random() * 3) + 1;
 			const column = Math.floor(Math.random() * 3) + 1;
-			if (triedCells.includes(`${row},${column}`)) { continue };
+			if (triedCells.includes(`${row},${column}`)) { continue; }
 			try {
 				gameFlow.playRound(row, column);
 				availableCellFound = true;
 			} catch {
-				triedCells.push(`${row},${column}`)
+				triedCells.push(`${row},${column}`);
 			}
 		}
-	};
+	}
 
 	function _getBestMove () {
 		const currentBoard = gameboard.getGameboard();
@@ -217,7 +217,7 @@ const gameFlow = (function () {
 					}
 				}
 			}
-		};
+		}
 		const possibleMovesCount = {};
 		for (const move of possibleMoves) {
 			if (!possibleMovesCount[move]) {
@@ -225,14 +225,14 @@ const gameFlow = (function () {
 			} else {
 				possibleMovesCount[move] = possibleMovesCount[move]+1;
 			}
-		};
+		}
 		for (let i = 3; i > 0; i--) {
 			for (const move in possibleMovesCount) {
 				if (possibleMovesCount[move] === i) {
 					return move.split(",");
 				}
 			}
-		};
+		}
 		return false;
 	}
 
@@ -242,7 +242,7 @@ const gameFlow = (function () {
 		},
 
 		newGame () {
-			if (!_gameOver) { throw Error("Game isn't over yet") };
+			if (!_gameOver) { throw Error("Game isn't over yet"); }
 			gameboard.reset();
 			display.renderGameboard();
 			display.renderScore(_player1.getScore(), _player2.getScore());
@@ -275,13 +275,13 @@ const gameFlow = (function () {
 		},
 
 		calcRobotRound () {
-			const randomNumber = Math.floor(Math.random() * 10) + 1
+			const randomNumber = Math.floor(Math.random() * 10) + 1;
 			if (randomNumber === 1) {
-				_playRandomMove()
+				_playRandomMove();
 			} else {
-				const result = _getBestMove()
+				const result = _getBestMove();
 				if (!result) {
-					_playRandomMove()
+					_playRandomMove();
 				} else {
 					gameFlow.playRound(result[0], result[1]);
 				}
@@ -316,7 +316,7 @@ const gameFlow = (function () {
 			} else if (playerNumber === 2) {
 				_player2 = createPlayer(name, marker, userControlled);
 			} else {
-				throw Error("Not a valid player number")
+				throw Error("Not a valid player number");
 			}
 			domRoot.style.setProperty(`--${marker}-color`, color);
 		},
@@ -344,9 +344,9 @@ const display = (function () {
 				} else {
 					cell.innerHTML = SVG.O;
 					cell.classList.remove("marker-X");
-					cell.classList.add("marker-O")
+					cell.classList.add("marker-O");
 				}
-			};
+			}
 		},
 
 		renderScore (player1, player2) {
@@ -460,7 +460,7 @@ const display = (function () {
 
 
 // Page Setup
-display.renderGameboard()
+display.renderGameboard();
 domPlayerSettings.showModal();
 
 domPlayerSettingsForm.addEventListener("click", display.toggleHumanSelect);
@@ -471,6 +471,6 @@ domGameboard.addEventListener("click", display.addMarker);
 
 for (const element of domModals) {
 	element.addEventListener("keydown", (e) => {
-		if (e.key === "Escape") { e.preventDefault(); };
+		if (e.key === "Escape") { e.preventDefault(); }
 	});
 }
