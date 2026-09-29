@@ -9,6 +9,7 @@
 	--muted-color: #8d8a85;
 	--line-color: #c9c4bb;
 	--accent-color: #3d5a80;
+	--border-radius: 15px;
 }
 
 * {
@@ -41,7 +42,7 @@ input {
 button {
 	padding: 8px 16px;
 	border: 2px solid var(--line-color);
-	border-radius: 10px;
+	border-radius: var(--border-radius);
 	background-color: var(--surface-color);
 	transition: background-color 0.15s, border-color 0.15s;
 }
@@ -58,7 +59,7 @@ input:focus-visible {
 dialog {
 	margin: auto;
 	border: none;
-	border-radius: 15px;
+	border-radius: var(--border-radius);
 	width: min(600px, 100% - 32px);
 	padding: var(--modal-spacing);
 	color: var(--text-color);
@@ -93,13 +94,13 @@ form label {
 label, input:not([type="color"]) {
 	text-align: center;
 	align-self: center;
-	border-radius: 15px;
+	border-radius: var(--border-radius);
 }
 
 input[type="text"] {
 	padding: 8px 12px;
 	border: 2px solid var(--line-color);
-	border-radius: 10px;
+	border-radius: var(--border-radius);
 	background-color: var(--surface-color);
 }
 
@@ -114,7 +115,7 @@ input[type="text"] {
 
 .form-buttons button {
 	aspect-ratio: 1/1;
-	border-radius: 15px;
+	border-radius: var(--border-radius);
 	padding: 0;
 }
 
@@ -205,7 +206,7 @@ form > button {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(3, 1fr);
-	border-radius: 15px;
+	border-radius: var(--border-radius);
 	overflow: hidden;
 }
 
