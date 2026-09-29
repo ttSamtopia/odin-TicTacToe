@@ -373,8 +373,8 @@ const display = (function () {
 			domMessageModal.showModal();
 		},
 
-		addMarker (event) {
-			let domCell = event.target;
+		addMarker (e) {
+			let domCell = e.target;
 			let row = domCell.dataset.row;
 			let column = domCell.dataset.column;
 			gameFlow.playRound(row, column);
@@ -382,7 +382,7 @@ const display = (function () {
 
 		toggleHumanSelect (e) {
 			const domButton = e.target;
-			if (domButton.getAttribute("class") !== "human-select") { return; }
+			if (!domButton.classList.contains("human-select")) { return; }
 			if (domButton.value === "human") {
 				domButton.value = "bot";
 				domButton.innerHTML = SVG.robot;
@@ -469,8 +469,8 @@ domPlayerSettingsForm.addEventListener("submit", display.playerFormHandler);
 
 domGameboard.addEventListener("click", display.addMarker);
 
-domModals.forEach((element) => {
+for (const element of domModals) {
 	element.addEventListener("keydown", (e) => {
 		if (e.key === "Escape") { e.preventDefault(); };
 	});
-});
+}
