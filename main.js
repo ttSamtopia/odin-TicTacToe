@@ -398,7 +398,7 @@ const display = (function () {
 
 		toggleMarkerSelect (e) {
 			const domButton = e.target;
-			if (domButton.contains("marker-select")) { return; }
+			if (!domButton.classList.contains("marker-select")) { return; }
 			let currentMarker;
 			let oppositeMarker;
 			if (domButton.value === "X") {
