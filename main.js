@@ -283,7 +283,7 @@ const gameFlow = (function () {
 				if (!result) {
 					_playRandomMove();
 				} else {
-					gameFlow.playRound(result[0], result[1]);
+					this.playRound(result[0], result[1]);
 				}
 			}
 		},
@@ -297,16 +297,16 @@ const gameFlow = (function () {
 				_gameOver = true;
 				_currentPlayer.addScore();
 				display.renderScore(_player1.getScore(), _player2.getScore());
-				display.createModal(`${_currentPlayer.name} won!`, `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", gameFlow.newGame);
+				display.createModal(`${_currentPlayer.name} won!`, `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", this.newGame);
 				return;
 			} else if (this.checkTie()) {
 				_gameOver = true;
-				display.createModal("It's a tie!", `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", gameFlow.newGame);
+				display.createModal("It's a tie!", `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", this.newGame);
 				return;
 			}
 			_switchCurrentPlayer();
 			if (!_currentPlayer.userControlled) {
-				gameFlow.calcRobotRound();
+				this.calcRobotRound();
 			}
 		},
 
