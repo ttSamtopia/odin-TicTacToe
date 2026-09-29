@@ -87,7 +87,7 @@ form label {
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
-	text-wrap: nowrap;
+	white-space: nowrap;
 }
 
 label, input:not([type="color"]) {
