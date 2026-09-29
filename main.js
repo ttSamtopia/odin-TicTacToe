@@ -1,6 +1,6 @@
 // Global Variables
 const domRoot = document.querySelector(":root");
-const domPlayerSettings = document.querySelector("dialog");
+const domPlayerSettings = document.querySelector("#player-settings");
 const domModals = document.querySelectorAll("dialog");
 const domMessageModal = document.querySelector("#message-modal");
 const domPlayer1MarkerSelect = document.querySelector("#player1-settings .marker-select");
