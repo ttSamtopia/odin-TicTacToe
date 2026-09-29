@@ -1,4 +1,4 @@
-// Global Variables
+// Global variables
 const domRoot = document.querySelector(":root");
 const domPlayerSettings = document.querySelector("#player-settings");
 const domModals = document.querySelectorAll("dialog");
@@ -19,7 +19,7 @@ const SVG = {
 };
 
 
-// gameboard factory
+// Gameboard factory
 const gameboard = (function () {
 	const _gameboard = [
 		["", "", ""],
@@ -31,8 +31,8 @@ const gameboard = (function () {
 		getCell (row, column) {
 			row = parseInt(row);
 			column = parseInt(column);
-			if (!(row >= 1 && row <= 3)) { throw Error("Incorrect Row Number (1-3)"); }
-			if (!(column >= 1 && column <= 3)) { throw Error("Incorrect Column Number (1-3)"); }
+			if (!(row >= 1 && row <= 3)) { throw Error("Incorrect row number (1-3)"); }
+			if (!(column >= 1 && column <= 3)) { throw Error("Incorrect column number (1-3)"); }
 			row--;
 			column--;
 			return _gameboard[row][column];
@@ -43,7 +43,7 @@ const gameboard = (function () {
 		},
 
 		placeMarker (marker, row, column) {
-			if (marker !== "X" && marker !== "O") { throw Error(`Not valid marker value ("X" or "O")`); }
+			if (marker !== "X" && marker !== "O") { throw Error(`Not a valid marker value ("X" or "O")`); }
 			const currentCellContent = this.getCell(row, column);
 			if (currentCellContent !== "") { throw Error("Cell already taken"); }
 			row--;
@@ -64,7 +64,7 @@ const gameboard = (function () {
 
 // Player factory
 function createPlayer (name, marker, userControlled = true) {
-	if (marker !== "X" && marker !== "O") { throw Error("Not Valid player marker"); }
+	if (marker !== "X" && marker !== "O") { throw Error("Not a valid player marker"); }
 	let _score = 0;
 
 	return {
@@ -83,7 +83,7 @@ function createPlayer (name, marker, userControlled = true) {
 }
 
 
-// gameFlow factory
+// Game flow factory
 const gameFlow = (function () {
 	let _currentPlayer = null;
 	let _gameOver = true;
@@ -324,7 +324,7 @@ const gameFlow = (function () {
 })();
 
 
-// display Factory
+// Display factory
 const display = (function () {
 
 	return {
@@ -458,7 +458,7 @@ const display = (function () {
 })();
 
 
-// Page Setup
+// Page setup
 display.renderGameboard();
 domPlayerSettings.showModal();
 
