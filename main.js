@@ -10,7 +10,6 @@ const domGameboard = document.querySelector("#gameboard");
 const domPlayer1Info = document.querySelector("#player1-info");
 const domPlayer2Info = document.querySelector("#player2-info");
 const domScore = document.querySelector("#score");
-const domNewGameButton = document.querySelector("#newGame-button");
 
 const SVG = {
 	X: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M22 2 2 22"/><path d="m2 2 20 20"/></svg>`,
@@ -183,7 +182,7 @@ const gameFlow = (function () {
 			try {
 				gameFlow.playRound(row, column);
 				availableCellFound = true;
-			} catch (error) {
+			} catch {
 				triedCells.push(`${row},${column}`)
 			}
 		}
@@ -294,29 +293,24 @@ const gameFlow = (function () {
 		},
 
 		playRound (row, column) {
-			try {
-				if (_gameOver) { throw Error("Game is already over"); }
-				if (_currentPlayer === null) { throw Error("Start a new game first"); }
-				gameboard.placeMarker(_currentPlayer.marker, row, column);
-				display.renderGameboard();
-				if (this.checkWin(row, column)) {
-					_gameOver = true;
-					_currentPlayer.addScore();
-					display.renderScore(_player1.getScore(), _player2.getScore());
-					display.createModal(`${_currentPlayer.name} won!`, `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", gameFlow.newGame);
-					return;
-				}
-				else if (this.checkTie()) {
-					_gameOver = true;
-					display.createModal("It's a tie!", `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", gameFlow.newGame);
-					return;
-				}
-				_switchCurrentPlayer();
-				if (!_currentPlayer.userControlled) {
-					gameFlow.calcRobotRound();
-				}
-			} catch (error) {
-				throw Error(error.message);
+			if (_gameOver) { throw Error("Game is already over"); }
+			if (_currentPlayer === null) { throw Error("Start a new game first"); }
+			gameboard.placeMarker(_currentPlayer.marker, row, column);
+			display.renderGameboard();
+			if (this.checkWin(row, column)) {
+				_gameOver = true;
+				_currentPlayer.addScore();
+				display.renderScore(_player1.getScore(), _player2.getScore());
+				display.createModal(`${_currentPlayer.name} won!`, `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", gameFlow.newGame);
+				return;
+			} else if (this.checkTie()) {
+				_gameOver = true;
+				display.createModal("It's a tie!", `Score is ${_player1.getScore()} - ${_player2.getScore()}`, "Play Again", gameFlow.newGame);
+				return;
+			}
+			_switchCurrentPlayer();
+			if (!_currentPlayer.userControlled) {
+				gameFlow.calcRobotRound();
 			}
 		},
 
@@ -384,28 +378,15 @@ const display = (function () {
 		},
 
 		addMarker (event) {
-			let domCell = event.target.closest(".cell");
-			if (domCell === null) { return; }
+			let domCell = event.target;
 			let row = domCell.dataset.row;
 			let column = domCell.dataset.column;
-			try {
-				gameFlow.playRound(row, column);
-			} catch (error) {
-				display.createModal("Invalid move", error.message);
-			}
-		},
-
-		newGameHandler () {
-			try {
-				gameFlow.newGame();
-			} catch (error) {
-				display.createModal("Can't start a new game", error.message);
-			}
+			gameFlow.playRound(row, column);
 		},
 
 		toggleHumanSelect (e) {
-			const domButton = e.target.closest(".human-select");
-			if (domButton === null) { return; }
+			const domButton = e.target;
+			if (domButton.getAttribute("class") !== "human-select") { return; }
 			if (domButton.value === "human") {
 				domButton.value = "bot";
 				domButton.innerHTML = SVG.robot;
@@ -416,8 +397,8 @@ const display = (function () {
 		},
 
 		toggleMarkerSelect (e) {
-			const domButton = e.target.closest(".marker-select");
-			if (domButton === null) { return; }
+			const domButton = e.target;
+			if (domButton.contains("marker-select")) { return; }
 			let currentMarker;
 			let oppositeMarker;
 			if (domButton.value === "X") {
@@ -491,8 +472,6 @@ domPlayerSettingsForm.addEventListener("click", display.toggleMarkerSelect);
 domPlayerSettingsForm.addEventListener("submit", display.playerFormHandler);
 
 domGameboard.addEventListener("click", display.addMarker);
-
-domNewGameButton.addEventListener("click", display.newGameHandler);
 
 domModals.forEach((element) => {
 	element.addEventListener("keydown", (e) => {
