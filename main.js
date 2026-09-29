@@ -1,24 +1,3 @@
-// Global variables
-const domRoot = document.querySelector(":root");
-const domPlayerSettings = document.querySelector("#player-settings");
-const domModals = document.querySelectorAll("dialog");
-const domMessageModal = document.querySelector("#message-modal");
-const domPlayer1MarkerSelect = document.querySelector("#player1-settings .marker-select");
-const domPlayer2MarkerSelect = document.querySelector("#player2-settings .marker-select");
-const domPlayerSettingsForm = document.querySelector("form");
-const domGameboard = document.querySelector("#gameboard");
-const domPlayer1Info = document.querySelector("#player1-info");
-const domPlayer2Info = document.querySelector("#player2-info");
-const domScore = document.querySelector("#score");
-
-const SVG = {
-	X: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M22 2 2 22"/><path d="m2 2 20 20"/></svg>`,
-	O: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle preview-icon"><circle cx="12" cy="12" r="10"/></svg>`,
-	human: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user preview-icon"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-	robot: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot preview-icon"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>`
-};
-
-
 // Gameboard factory
 const gameboard = (function () {
 	const _gameboard = [
@@ -310,7 +289,7 @@ const gameFlow = (function () {
 			}
 		},
 
-		setupPlayer (playerNumber, name, marker, userControlled, color) {
+		setupPlayer (playerNumber, name, marker, userControlled) {
 			if (playerNumber === 1) {
 				_player1 = createPlayer(name, marker, userControlled);
 			} else if (playerNumber === 2) {
@@ -318,7 +297,6 @@ const gameFlow = (function () {
 			} else {
 				throw Error("Not a valid player number");
 			}
-			domRoot.style.setProperty(`--${marker}-color`, color);
 		},
 	};
 })();
@@ -326,6 +304,24 @@ const gameFlow = (function () {
 
 // Display factory
 const display = (function () {
+	const domRoot = document.querySelector(":root");
+	const domPlayerSettings = document.querySelector("#player-settings");
+	const domModals = document.querySelectorAll("dialog");
+	const domMessageModal = document.querySelector("#message-modal");
+	const domPlayer1MarkerSelect = document.querySelector("#player1-settings .marker-select");
+	const domPlayer2MarkerSelect = document.querySelector("#player2-settings .marker-select");
+	const domPlayerSettingsForm = document.querySelector("form");
+	const domGameboard = document.querySelector("#gameboard");
+	const domPlayer1Info = document.querySelector("#player1-info");
+	const domPlayer2Info = document.querySelector("#player2-info");
+	const domScore = document.querySelector("#score");
+
+	const SVG = {
+		X: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M22 2 2 22"/><path d="m2 2 20 20"/></svg>`,
+		O: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle preview-icon"><circle cx="12" cy="12" r="10"/></svg>`,
+		human: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user preview-icon"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+		robot: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot preview-icon"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>`
+	};
 
 	return {
 		renderGameboard () {
@@ -422,15 +418,15 @@ const display = (function () {
 				form["player1-name"].value,
 				form["player1-marker-select"].value,
 				form["player1-human-select"].value === "human",
-				form["player1-color"].value,
 			);
 			gameFlow.setupPlayer(
 				2,
 				form["player2-name"].value,
 				form["player2-marker-select"].value,
 				form["player2-human-select"].value === "human",
-				form["player2-color"].value,
 			);
+			domRoot.style.setProperty(`--${form["player1-marker-select"].value}-color`, form["player1-color"].value);
+			domRoot.style.setProperty(`--${form["player2-marker-select"].value}-color`, form["player2-color"].value);
 
 			domPlayer1Info.querySelector("h2").textContent = form["player1-name"].value;
 			domPlayer1Info.querySelector(".player-header div").innerHTML = form["player1-human-select"].value === "human" ? SVG.human : SVG.robot;
@@ -454,22 +450,27 @@ const display = (function () {
 			domPlayerSettings.close();
 			gameFlow.newGame();
 		},
+
+		init () {
+			this.renderGameboard();
+			domPlayerSettings.showModal();
+
+			domPlayerSettingsForm.addEventListener("click", this.toggleHumanSelect);
+			domPlayerSettingsForm.addEventListener("click", this.toggleMarkerSelect);
+			domPlayerSettingsForm.addEventListener("submit", this.playerFormHandler);
+
+			domGameboard.addEventListener("click", this.addMarker);
+
+			for (const element of domModals) {
+				element.addEventListener("keydown", (e) => {
+					if (e.key === "Escape") { e.preventDefault(); }
+				});
+			}
+		},
 	};
 })();
 
 
 // Page setup
-display.renderGameboard();
-domPlayerSettings.showModal();
+display.init();
 
-domPlayerSettingsForm.addEventListener("click", display.toggleHumanSelect);
-domPlayerSettingsForm.addEventListener("click", display.toggleMarkerSelect);
-domPlayerSettingsForm.addEventListener("submit", display.playerFormHandler);
-
-domGameboard.addEventListener("click", display.addMarker);
-
-for (const element of domModals) {
-	element.addEventListener("keydown", (e) => {
-		if (e.key === "Escape") { e.preventDefault(); }
-	});
-}
